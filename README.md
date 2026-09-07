@@ -8,6 +8,19 @@
 pip install pyocrcaptcha
 ```
 
+`pip` 会根据包元数据自动安装运行依赖：
+
+- `ultralytics>=8.3.0`
+- `Pillow>=10.0.0`
+- Ultralytics 的传递依赖，包括 PyTorch、TorchVision、NumPy、OpenCV 等
+
+因此不需要再手动安装 `requirements.txt`。如果需要确认依赖解析结果，可以执行：
+
+```bash
+python -m pip show pyocrcaptcha
+python -m pip check
+```
+
 ## 发布到 PyPI
 
 仓库通过 `.github/workflows/workflow.yml` 使用 PyPI Trusted Publishing 发布，不需要保存 API Token。工作流会在发布 GitHub Release 时自动运行，也可以在 GitHub Actions 页面手动运行。
