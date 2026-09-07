@@ -51,9 +51,7 @@ class CaptchaOCR:
     def recognize(self, image: PathLike, positions: int | None = None) -> CaptchaResult:
         """Recognize an image and return a structured :class:`CaptchaResult`."""
         requested = positions if positions is not None else self.positions
-        counts = (requested,) if requested is not None else self._valid_position_counts(image)
-        if not counts:
-            raise ValueError("Image width is not divisible by either 4 or 5; pass positions explicitly")
+        counts = (requested,) if requested is not None else (4, 5)
         candidates = [self._recognize_fixed(image, count) for count in counts]
         return max(candidates, key=lambda result: result.confidence)
 
@@ -61,25 +59,20 @@ class CaptchaOCR:
         """Recognize an image and return only the decoded text."""
         return self.recognize(image, positions=positions).text
 
-    @staticmethod
-    def _valid_position_counts(image_path: PathLike) -> tuple[int, ...]:
-        with Image.open(image_path) as source:
-            width = source.width
-        return tuple(count for count in (4, 5) if width % count == 0)
-
     def _recognize_fixed(self, image_path: PathLike, positions: int) -> CaptchaResult:
         if positions < 1:
             raise ValueError("positions must be at least 1")
         with Image.open(image_path) as source:
             image = source.convert("RGB")
             width, height = image.size
-            if width % positions:
-                raise ValueError(f"Image width {width} is not divisible by {positions}")
-            char_width = width // positions
             characters: list[str] = []
             confidences: list[float] = []
             for index in range(positions):
-                crop = image.crop((index * char_width, 0, (index + 1) * char_width, height))
+                # Use proportional boundaries so screenshots with padding or
+                # non-integral character widths are still supported.
+                left = round(index * width / positions)
+                right = round((index + 1) * width / positions)
+                crop = image.crop((left, 0, right, height))
                 kwargs = {} if self.device is None else {"device": self.device}
                 prediction = self.model.predict(source=crop, imgsz=self.imgsz, verbose=False, **kwargs)[0]
                 top1 = int(prediction.probs.top1)

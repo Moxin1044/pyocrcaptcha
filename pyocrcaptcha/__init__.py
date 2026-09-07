@@ -3,4 +3,4 @@
 from .ocr import CaptchaOCR, CaptchaResult
 
 __all__ = ["CaptchaOCR", "CaptchaResult"]
-__version__ = "1.0.0"
+__version__ = "1.0.1"
