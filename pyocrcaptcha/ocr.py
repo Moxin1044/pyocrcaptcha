@@ -46,19 +46,26 @@ class CaptchaOCR:
         self.positions = positions
         self.imgsz = imgsz
         self.device = device
-        kwargs = {} if device is None else {"device": device}
-        self.model = YOLO(str(self.model_path), **kwargs)
+        self.model = YOLO(str(self.model_path))
 
     def recognize(self, image: PathLike, positions: int | None = None) -> CaptchaResult:
         """Recognize an image and return a structured :class:`CaptchaResult`."""
         requested = positions if positions is not None else self.positions
-        counts = (requested,) if requested is not None else (4, 5)
+        counts = (requested,) if requested is not None else self._valid_position_counts(image)
+        if not counts:
+            raise ValueError("Image width is not divisible by either 4 or 5; pass positions explicitly")
         candidates = [self._recognize_fixed(image, count) for count in counts]
         return max(candidates, key=lambda result: result.confidence)
 
     def __call__(self, image: PathLike, positions: int | None = None) -> str:
         """Recognize an image and return only the decoded text."""
         return self.recognize(image, positions=positions).text
+
+    @staticmethod
+    def _valid_position_counts(image_path: PathLike) -> tuple[int, ...]:
+        with Image.open(image_path) as source:
+            width = source.width
+        return tuple(count for count in (4, 5) if width % count == 0)
 
     def _recognize_fixed(self, image_path: PathLike, positions: int) -> CaptchaResult:
         if positions < 1:

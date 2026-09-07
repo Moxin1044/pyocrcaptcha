@@ -8,10 +8,28 @@ version = "1.0.0"
 description = "YOLO-based fixed-width image CAPTCHA OCR"
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{name = "Moxin1044"}]
 dependencies = ["ultralytics>=8.3.0", "Pillow>=10.0.0"]
 keywords = ["captcha", "ocr", "yolo", "computer-vision"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/Moxin1044/pyocrcaptcha"
+Repository = "https://github.com/Moxin1044/pyocrcaptcha"
+Issues = "https://github.com/Moxin1044/pyocrcaptcha/issues"
+Releases = "https://github.com/Moxin1044/pyocrcaptcha/releases"
 
 [project.scripts]
 pyocrcaptcha = "pyocrcaptcha.cli:main"

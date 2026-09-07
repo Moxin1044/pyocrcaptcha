@@ -8,6 +8,22 @@
 pip install pyocrcaptcha
 ```
 
+## 发布到 PyPI
+
+仓库通过 `.github/workflows/workflow.yml` 使用 PyPI Trusted Publishing 发布，不需要保存 API Token。工作流会在发布 GitHub Release 时自动运行，也可以在 GitHub Actions 页面手动运行。
+
+首次发布前，需要在 PyPI 的 Trusted Publisher 设置中填写：
+
+```text
+PyPI project name: pyocrcaptcha
+Owner: Moxin1044
+Repository: pyocrcaptcha
+Workflow: workflow.yml
+Environment: pypi
+```
+
+工作流会拉取 Git LFS 模型、构建 wheel 和 sdist，并确认 wheel 内包含完整模型后再上传。
+
 从源码安装：
 
 ```bash
