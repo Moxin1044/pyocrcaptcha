@@ -16,6 +16,10 @@ cd pyocrcaptcha
 pip install .
 ```
 
+模型也可从 [V1.0.0 Release](https://github.com/Moxin1044/pyocrcaptcha/releases/tag/V1.0.0) 单独下载：
+
+[下载 captcha-character-classifier-yolo11n-100e.pt](https://github.com/Moxin1044/pyocrcaptcha/releases/download/V1.0.0/captcha-character-classifier-yolo11n-100e.pt)
+
 ## 命令行
 
 自动判断 4 位或 5 位验证码：
