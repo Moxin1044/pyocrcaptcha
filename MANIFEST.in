@@ -1,0 +1,1 @@
+recursive-include pyocrcaptcha/models *.pt
